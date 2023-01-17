@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { navigateToAdmin, navigateToHome } from "../routes/coordinator";
+import { navigateToAdmin, navigateToHome, navigateToTrip } from "../routes/coordinator";
 
 function Header() {
   const navigate = useNavigate();
@@ -11,6 +11,9 @@ function Header() {
       </button>
       <button onClick={() => navigateToAdmin(navigate)}>
         Ir para página de admin
+      </button>
+      <button onClick={() => navigateToTrip(navigate)}>
+        Ir para página de viagens
       </button>
     </header>
   );

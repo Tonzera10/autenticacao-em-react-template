@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Header from "../components/Header";
 import styled from "styled-components";
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
+import { navigateToAdmin } from "../routes/coordinator";
 
 const Form = styled.form`
   display: flex;
@@ -11,13 +14,33 @@ const Form = styled.form`
 function HomePage() {
   const [form, setForm] = useState({ email: "", senha: "" });
 
+  const navigate = useNavigate()
+
   const onChange = (event) => {
     const { name, value } = event.target;
     setForm({ ...form, [name]: value });
   };
 
+  const login = () => {
+    const body = {
+      email: form.email,
+      password: form.senha
+    }
+
+    axios.post("https://us-central1-labenu-apis.cloudfunctions.net/labeX/everton-barbosa/login", body)
+    .then((res) => {
+      console.log(res.data.token)
+      localStorage.setItem("token", res.data.token)
+      navigateToAdmin(navigate)
+    })
+    .catch((e) => {
+      console.log(e.message)
+    })
+  }
+
   const submitForm = (event) => {
     event.preventDefault();
+    login()
     console.log(form);
   };
   return (
@@ -30,7 +53,7 @@ function HomePage() {
           id="email"
           name="email"
           type="text"
-          input="form.email"
+          value={form.email}
           onChange={onChange}
           placeholder="email"
           required
@@ -41,7 +64,7 @@ function HomePage() {
           id="senha"
           name="senha"
           type="password"
-          input="form.senha"
+          value={form.senha}
           onChange={onChange}
           placeholder="senha"
           required
